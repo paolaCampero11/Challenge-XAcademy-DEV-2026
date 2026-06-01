@@ -1,7 +1,8 @@
-# Santex Academy - FootballAPI
+# Challenge FIFA Players - XAcademy 2026
 
-## Pasos para correr
+Aplicación web full-stack para la gestión de jugadores de FIFA (2015-2023), desarrollada como parte del desafío de XAcademy.
 
+## Cómo correr el proyecto
 1. Instalar Docker Desktop: Si no lo tienen, es el primer paso.
 2. Clonar tu repositorio: 
    
@@ -67,3 +68,12 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+## Decisiones Técnicas
+
+| Decisión | Herramienta Elegida | Motivo |
+|----------|---------------------|--------|
+| **Contenerización** | Docker & Docker Compose | Para garantizar que el entorno de desarrollo sea idéntico en cualquier máquina y simplificar el levantamiento de la BD y los servicios. |
+| **Backend** | NestJS (Node.js) | Arquitectura modular y escalable, similar a Angular, facilitando la organización en controladores y servicios. |
+| **Frontend** | Angular  | Framework robusto que ofrece soluciones integradas para enrutamiento, formularios reactivos y manejo de estado. |
+| **Base de Datos** | MySQL 8.0 | Base de datos relacional ideal para manejar las relaciones 1:N entre jugadores y sus versiones históricas de FIFA. |
+| **ORM** | Sequelize | Permite interactuar con la base de datos usando JavaScript/TypeScript, evitando escribir SQL crudo y facilitando las migraciones. |
