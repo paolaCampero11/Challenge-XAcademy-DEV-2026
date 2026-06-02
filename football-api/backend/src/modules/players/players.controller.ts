@@ -6,13 +6,38 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
+  Query, 
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { PlayerDto } from './dto/player.dto';
+import { FindAllOptions } from './interfaces/player-repository.interface';
+import { Player } from './entities/player.entity';
 
 @Controller('api/players')
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getAllPlayers(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('name') name?: string,
+    @Query('club') club?: string,
+    @Query('position') position?: string,
+  ): Promise<{ data: Player[]; total: number; page: number; limit: number; totalPages: number }> {
+    const safeLimit = limit ? Math.min(Number(limit), 100) : 20; // Máximo 100 por página
+    const safePage = page ? Math.max(Number(page), 1) : 1; // Mínimo página 1
+    const offset = (safePage - 1) * safeLimit;
+
+    const options: FindAllOptions = {
+      limit: safeLimit,
+      offset,
+      filters: { name, club, position },
+    };
+
+    return await this.playersService.getAllPlayersPaginated(options);
+  }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)

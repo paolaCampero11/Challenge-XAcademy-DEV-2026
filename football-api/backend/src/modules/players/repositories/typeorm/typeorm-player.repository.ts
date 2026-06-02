@@ -1,6 +1,6 @@
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Player } from '../../entities/player.entity';
-import { IPlayerRepository } from '../../interfaces/player-repository.interface';
+import { FindAllOptions, IPlayerRepository, PaginatedResult } from '../../interfaces/player-repository.interface';
 import { PlayerDto } from './player.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,12 +12,25 @@ export class TypeOrmPlayerRepository implements IPlayerRepository {
     private readonly playerRepository: Repository<PlayerDto>,
   ) {}
 
-  async findAll(): Promise<Player[]> {
-    const playerList = (await this.playerRepository.find()).map((x) =>
-      this.mapToEntity(x),
-    );
+  async findAllPaginated(options: FindAllOptions): Promise<PaginatedResult<Player>> {
+    const { limit = 20, offset = 0, filters = {} } = options;
+    const where: any = {};
+    
+    if (filters.name) where.longName = Like(`%${filters.name}%`);
+    if (filters.club) where.clubName = Like(`%${filters.club}%`);
+    if (filters.position) where.playerPositions = Like(`%${filters.position}%`);
 
-    return playerList;
+    const total = await this.playerRepository.count({ where });
+    const dtos = await this.playerRepository.find({ where, skip: offset, take: limit });
+    const data = dtos.map((x) => this.mapToEntity(x));
+
+    return {
+      data,
+      total,
+      page: Math.floor(offset / limit) + 1,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOneById(id: number): Promise<Player | undefined> {

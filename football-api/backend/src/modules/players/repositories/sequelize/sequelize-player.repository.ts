@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
 import { PlayerModel } from './player.model'; // Sequelize model
-import { IPlayerRepository } from '../../interfaces/player-repository.interface';
+import { FindAllOptions, IPlayerRepository, PaginatedResult } from '../../interfaces/player-repository.interface';
 import { Player } from '../../entities/player.entity';
 
 @Injectable()
@@ -11,9 +12,38 @@ export class SequelizePlayerRepository implements IPlayerRepository {
     private readonly playerModel: typeof PlayerModel,
   ) {}
 
-  async findAll(): Promise<Player[]> {
-    const playerList = await this.playerModel.findAll();
-    return playerList.map((x) => this.mapToEntity(x));
+  async findAllPaginated(options: FindAllOptions): Promise<PaginatedResult<Player>> {
+    const { limit = 20, offset = 0, filters = {} } = options;
+
+    const where: any = {};
+
+    if (filters.name) {
+      where.longName = { [Op.like]: `%${filters.name}%` }; 
+    }
+    if (filters.club) {
+      where.clubName = { [Op.like]: `%${filters.club}%` };
+    }
+    if (filters.position) {
+      where.playerPositions = { [Op.like]: `%${filters.position}%` };
+    }
+
+    const total = await this.playerModel.count({ where });
+
+    const playerList = await this.playerModel.findAll({
+      where,
+      limit,
+      offset,
+    });
+
+    const data = playerList.map((x) => this.mapToEntity(x));
+
+    return {
+      data,
+      total,
+      page: Math.floor(offset / limit) + 1,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOneById(id: number): Promise<Player | undefined> {
