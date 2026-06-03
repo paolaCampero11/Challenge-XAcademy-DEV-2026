@@ -26,8 +26,8 @@ export class PlayersController {
     @Query('club') club?: string,
     @Query('position') position?: string,
   ): Promise<{ data: Player[]; total: number; page: number; limit: number; totalPages: number }> {
-    const safeLimit = limit ? Math.min(Number(limit), 100) : 20; // Máximo 100 por página
-    const safePage = page ? Math.max(Number(page), 1) : 1; // Mínimo página 1
+    const safeLimit = limit ? Math.min(Number(limit), 100) : 20; 
+    const safePage = page ? Math.max(Number(page), 1) : 1; 
     const offset = (safePage - 1) * safeLimit;
 
     const options: FindAllOptions = {

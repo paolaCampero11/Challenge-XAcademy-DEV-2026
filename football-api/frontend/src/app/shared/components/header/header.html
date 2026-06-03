@@ -1,0 +1,18 @@
+<header>
+    <div class="container">
+        <a href="#" class="logo">Logo</a>
+
+        <nav>
+            <ul>
+                @for(link of navLinks; track link.path){
+                    <li>
+                        <a [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
+                    </li>
+                }
+                
+            </ul>
+            
+        </nav>
+    </div>
+    
+</header>

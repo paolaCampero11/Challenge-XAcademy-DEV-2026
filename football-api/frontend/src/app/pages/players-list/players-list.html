@@ -1,0 +1,110 @@
+<div>
+  <h2>Listado de Jugadores FIFA</h2>
+
+  <!-- SECCIÓN DE FILTROS -->
+  <div >
+    <input 
+      type="text" 
+      placeholder="Nombre..." 
+      [(ngModel)]="filterName"
+    >
+    <input 
+      type="text" 
+      placeholder="Club (ej Barcelona)..." 
+      [(ngModel)]="filterClub" 
+    >
+    <input 
+      type="text" 
+      placeholder="Posición (ej: ST, CB)..." 
+      [(ngModel)]="filterPosition" 
+    >
+    <button 
+      (click)="applyFilters()" 
+    >
+      Buscar
+    </button>
+  </div>
+
+  <!-- MENSAJES DE ESTADO -->
+  @if(loading){
+    <div>
+    Cargando jugadores...
+    </div>
+  }@else{
+    <div style="background: #ffe6e6; color: #c0392b;">
+      {{ error }}
+    </div>
+  }
+
+  <!-- TABLA DE DATOS -->
+  @if(!loading && !error){
+    <table >
+        <thead>
+          <tr >
+            <th >ID</th>
+            <th >Nombre</th>
+            <th >Club</th>
+            <th >Posición</th>
+            <th >Nacionalidad</th>
+            <th >Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(player of players; track player.id){
+            <tr >
+              <td >{{ player.id }}</td>
+              <td >{{ player.name }}</td>
+              <td >{{ player.club }}</td>
+              <td ><span >{{ player.position }}</span></td>
+              <td >{{ player.nationality }}</td>
+              <td >
+                <span >
+                  {{ player.rating }}
+                </span>
+              </td>
+              <td>
+                <button (click)="verDetalle(player.id)">Ver más</button>
+              </td>
+            </tr>
+          }
+          
+        </tbody>
+      </table>
+  } 
+  @if(!loading && players.length === 0){
+    <p >
+      No se encontraron jugadores con esos filtros.
+    </p>
+  }
+  
+
+  <!-- PAGINACIÓN -->
+  @if(!loading && players.length > 0){
+    <div >
+        <span >
+          Mostrando {{ players.length }} de {{ totalPlayers }} jugadores (Página {{ currentPage }} de {{ totalPages }})
+        </span>
+        
+        <div style="display: flex; gap: 10px;">
+          <button 
+            (click)="prevPage()" 
+            [disabled]="currentPage === 1"
+          >
+            ⬅ Anterior
+          </button>
+          
+          <button 
+            (click)="nextPage()" 
+            [disabled]="currentPage === totalPages"
+          >
+            Siguiente ➡
+          </button>
+        </div>
+      </div>
+  }
+  
+
+  <div>
+    <button>Descargar en un excel!</button>
+  </div>
+</div>

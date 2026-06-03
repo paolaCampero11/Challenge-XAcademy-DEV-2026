@@ -1,0 +1,14 @@
+<div class="container-player">
+    <h1>Detalles del Jugador</h1>
+    @if(player){
+        <h2>{{ player.name }}</h2>
+        <p>Club: {{ player.club }}</p>
+        <p>Posición: {{ player.position }}</p>
+        <p>Nacionalidad: {{ player.nationality }}</p>
+        <p>Rating: {{ player.rating }}</p>
+    } @else{
+        <p>{{errorMessage || 'Cargando jugador...' }} </p>
+    }
+</div>
+
+<app-player-chart ></app-player-chart>
