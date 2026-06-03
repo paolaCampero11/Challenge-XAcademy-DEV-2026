@@ -56,21 +56,24 @@ export class SequelizePlayerRepository implements IPlayerRepository {
 
   private mapToEntity(model: PlayerModel): Player {
     console.log('Mapping PlayerModel to Player entity:', model);
+    
+  const data = (model as any).dataValues || model;
     if (!model) {
       throw new Error('Attempted to map null model to Player entity');
     }
     const player = new Player();
-    player.id = model.id;
-    player.name = model.longName;
-    player.club = model.clubName || 'Unknown Club';
-    player.position = model.playerPositions?.split(',')[0].trim() ?? 'Unknown';
-    player.nationality = model.nationalityName || 'Unknown Nationality';
-    player.rating = model.overall;
-    player.speed = model.pace ?? 0;
-    player.shooting = model.shooting ?? 0;
-    player.dribbling = model.dribbling ?? 0;
-    player.passing = model.passing ?? 0;
+    player.id = data.id;
+    player.name = data.longName;
+    player.club = data.clubName || 'Unknown Club';
+    player.position = data.playerPositions?.split(',')[0].trim() ?? 'Unknown';
+    player.nationality = data.nationalityName || 'Unknown Nationality';
+    player.rating = data.overall;
+    player.speed = data.pace ?? 0;
+    player.shooting = data.shooting ?? 0;
+    player.dribbling = data.dribbling ?? 0;
+    player.passing = data.passing ?? 0;
 
+    
     return player;
   }
 }

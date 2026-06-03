@@ -32,7 +32,15 @@ export class PlayerDetail implements OnInit {
     console.log("desde el detail", this.id);
 
     this.playerService.getPlayer(Number(this.id)).subscribe({
-      next: (data) => (this.player = data),
+      next: (data) => {this.player = data
+         console.log('🔵 DATOS RECIBIDOS EN PADRE:', data);
+      console.log('🔵 Valores específicos:', {
+        speed: data.speed,
+        shooting: data.shooting,
+        passing: data.passing,
+        dribbling: data.dribbling
+      });
+      },
       error: (err) => (this.errorMessage = 'Jugador no encontrado'),
       
     });

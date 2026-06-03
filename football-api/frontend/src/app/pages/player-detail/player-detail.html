@@ -10,5 +10,17 @@
         <p>{{errorMessage || 'Cargando jugador...' }} </p>
     }
 </div>
+<div>
+    <p>Gráfico de habilidades</p>
+    @if (player && player.speed) {
+        <app-player-chart 
+            [speed]="player.speed"
+            [shooting]="player.shooting"
+            [passing]="player.passing"
+            [dribbling]="player.dribbling">
+        </app-player-chart>
+    }@else{
+        <p>Sin gráfico a mostrar</p>
+    }
+</div>
 
-<app-player-chart ></app-player-chart>

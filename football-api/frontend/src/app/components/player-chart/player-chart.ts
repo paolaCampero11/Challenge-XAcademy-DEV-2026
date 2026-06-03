@@ -1,31 +1,57 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {Chart, ChartType, registerables } from 'chart.js';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {Chart, ChartType, plugins, registerables, scales } from 'chart.js';
+import { CommonModule } from '@angular/common';
 
+Chart.register(...registerables);
 @Component({
   selector: 'app-player-chart',
-  imports: [],
+  imports: [
+    CommonModule
+  ],
   templateUrl: './player-chart.html',
   styleUrl: './player-chart.css',
 })
 export class PlayerChart implements OnInit{
   public chart?: Chart;
-  @Input() regate?: number; 
+  @Input() speed: number = 0;
+  @Input() shooting: number = 0;
+  @Input() passing: number = 0;
+  @Input() dribbling: number = 0;
 
   constructor() {
     
   }
 
   ngOnInit (): void{
-    Chart.register(...registerables);
-    const labels = ['Regate', 'Curva', 'Precision tiros libres', 'Pases largos', 'Control del balón'];
+    console.log('🟢 Valores iniciales en ngOnInit:', {
+      speed: this.speed,
+      shooting: this.shooting,
+      passing: this.passing,
+      dribbling: this.dribbling
+    });
+    this.createChart();
+  }
+
+  ngOnDestroy(): void {
+    if (this.chart) {
+      this.chart.destroy();
+    }
+  }
+
+  private createChart(){
+    
+    const labels = ['Velocidad', 'Tiro', 'Pase', 'Regate'];
+    console.log(this.speed, this.shooting, this.passing, this.dribbling,"entra aca ??");
+    const dataValues = [this.speed, this.shooting, this.passing, this.dribbling];
     const data = {
       labels: labels,
       datasets: [
         {
           label: 'Habilidades',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          data: dataValues,
           borderColor: 'rgb(75, 192, 192)',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          
         }
         
       ]
@@ -36,12 +62,32 @@ export class PlayerChart implements OnInit{
       data: data,  
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              stepSize: 20,
+              display: false // Oculta los numeritos del eje para que se vea más limpio
+            },
+            grid: {
+              color: 'rgba(0, 0, 0, 0.1)'
+            },
+            pointLabels: {
+              font: {
+                size: 12,
+                weight: 'bold'
+              }
+            }
+          }
+        },
         plugins: {
           title: {
-            display: true,
-            text: 'Chart.js Radar Chart'
+            display: false
           }
-        }
+        },
+        
       },
     });
   }
