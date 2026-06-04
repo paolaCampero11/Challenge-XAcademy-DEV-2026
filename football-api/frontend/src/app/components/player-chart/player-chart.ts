@@ -23,12 +23,6 @@ export class PlayerChart implements OnInit{
   }
 
   ngOnInit (): void{
-    console.log('🟢 Valores iniciales en ngOnInit:', {
-      speed: this.speed,
-      shooting: this.shooting,
-      passing: this.passing,
-      dribbling: this.dribbling
-    });
     this.createChart();
   }
 
@@ -41,7 +35,6 @@ export class PlayerChart implements OnInit{
   private createChart(){
     
     const labels = ['Velocidad', 'Tiro', 'Pase', 'Regate'];
-    console.log(this.speed, this.shooting, this.passing, this.dribbling,"entra aca ??");
     const dataValues = [this.speed, this.shooting, this.passing, this.dribbling];
     const data = {
       labels: labels,
@@ -69,7 +62,7 @@ export class PlayerChart implements OnInit{
             max: 100,
             ticks: {
               stepSize: 20,
-              display: false // Oculta los numeritos del eje para que se vea más limpio
+              display: false
             },
             grid: {
               color: 'rgba(0, 0, 0, 0.1)'

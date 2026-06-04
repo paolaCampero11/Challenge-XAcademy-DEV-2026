@@ -14,6 +14,6 @@ export class Header {
   navLinks = [
     { path: '/jugadores', label: 'Jugadores' },
     { path: '/login', label: 'Inicio de sesión' },
-    { path: '/playerDetail', label: 'Detalle jugador' }
+    { path: '/jugadores/nuevo', label: 'Registrar jugador' }
   ];
 }

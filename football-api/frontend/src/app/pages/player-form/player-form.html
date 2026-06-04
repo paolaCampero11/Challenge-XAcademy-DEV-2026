@@ -1,0 +1,122 @@
+
+<form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="name">Nombre*: </label>
+        <input id="name" type="text" formControlName="name" placeholder="Lionel">
+        @if(playerForm.get('name')?.invalid && (playerForm.get('name')?.dirty || playerForm.get('name')?.touched)){
+            <div class="alert-danger">
+                @if(playerForm.get('name')?.errors?.['required']){
+                    <div class="container-error-message">
+                        El nombre es requerido
+                    </div>
+                } @else if (playerForm.get('name')?.errors?.['noNumbers']){
+                    <div class="container-error-message">
+                        El nombre no puede tener números
+                    </div>
+                }@else if (playerForm.get('name')?.errors?.['minlength']){
+                    <div class="container-error-message">
+                        El nombre debe tener almenos 2 caracateres
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div>
+        <label for="position">Posición*: </label>
+        <select formControlName="position">
+            <option [ngValue]="null" disabled>Seleccionar la posición</option>
+             @for(position of positions; track position.value){
+                <option [value]="position.value">{{position.value}}</option>
+            }            
+        </select>
+        @if(playerForm.get('position')?.invalid && (playerForm.get('position')?.dirty || playerForm.get('position')?.touched)){
+            <div class="alert-danger">
+                @if(playerForm.get('position')?.errors?.['required']){
+                    <div class="container-error-message">
+                        La posición es requerida
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div>
+        <label for="club">Club*: </label>
+        <input id="club" type="text" formControlName="club" placeholder="Barcelona"> 
+        @if(playerForm.get('club')?.invalid && (playerForm.get('club')?.dirty || playerForm.get('club')?.touched)){
+            <div class="alert-danger">
+                @if(playerForm.get('club')?.errors?.['required']){
+                    <div class="container-error-message">
+                        El club es requerido
+                    </div>
+                }@else if(playerForm.get('club')?.errors?.['minlength']){
+                    <div class="container-error-message">
+                        El club debe tener al menos 4 caracteres
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div>
+        <label for="rating">Calificación*: </label>
+        <input id="rating" type="number" formControlName="rating" placeholder="95">
+        @if(playerForm.get('rating')?.invalid && (playerForm.get('rating')?.dirty || playerForm.get('rating')?.touched)){
+            <div class="alert-danger">
+                @if(playerForm.get('rating')?.errors?.['required']){
+                    <div class="container-error-message">
+                        La calificación es requerida
+                    </div>
+                }@else if(playerForm.get('rating')?.errors?.['min']){
+                    <div class="container-error-message">
+                        La calificación debe ser mayor a cero (0)
+                    </div>
+                }@else if(playerForm.get('rating')?.errors?.['max']){
+                    <div class="container-error-message">
+                        La calificación debe ser menor a cien (100)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <div>
+        <label for="nationality">Nacionalidad*: </label>
+        <input id="nationality" type="text" formControlName="nationality" placeholder="Argentina">
+        @if(playerForm.get('nationality')?.invalid && (playerForm.get('nationality')?.dirty || playerForm.get('nationality')?.touched)){
+            <div class="alert-danger">
+                @if(playerForm.get('nationality')?.errors?.['required']){
+                    <div class="container-error-message">
+                        La nacionalidad es requerida
+                    </div>
+                }@else if(playerForm.get('nationality')?.errors?.['minlength']){
+                    <div class="container-error-message">
+                        La nacionalidad debe tener al menos 4 caracteres
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <h3>Habilidades: </h3>
+    <div>
+        <label for="speed">Velocidad: </label>
+        <input id="speed" type="number" formControlName="speed" placeholder="90">
+    </div>
+    <div>
+        <label for="dribbling">Regate: </label>
+        <input id="dribbling" type="number" formControlName="dribbling" placeholder="90">
+    </div>
+    <div>
+        <label for="shooting">Tiro: </label>
+        <input id="shooting" type="number" formControlName="shooting" placeholder="90">
+    </div>
+    <div>
+        <label for="passing">Pase: </label>
+        <input id="passing" type="number" formControlName="passing" placeholder="90">
+    </div>
+    <button type="submit" [disabled]="playerForm.invalid">Enviar</button>
+</form>
+
+<h2>Valores</h2>
+<pre>{{playerForm.value | json}} </pre>
+<h3>Es valido?</h3>
+<pre>{{playerForm.valid | json}}</pre>
+
