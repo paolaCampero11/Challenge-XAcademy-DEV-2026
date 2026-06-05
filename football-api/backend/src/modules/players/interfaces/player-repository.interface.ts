@@ -23,4 +23,6 @@ export interface PaginatedResult<T> {
 export interface IPlayerRepository {
   findAllPaginated(options: FindAllOptions): Promise<PaginatedResult<Player>>;
   findOneById(id: number): Promise<Player | undefined>;
+  create(data: Partial<Player>): Promise<Player>
+  update(id: number, data: Partial<Player>): Promise<Player>
 }

@@ -1,3 +1,16 @@
+<h2>{{ isEditMode ? 'Editar Jugador' : 'Crear Nuevo Jugador' }}</h2>
+
+@if(successMessage){
+<div class="alert alert-success">
+  {{ successMessage }}
+</div>
+}
+
+@if(errorMessage){
+<div class="alert alert-success">
+  {{ errorMessage }}
+</div>
+}
 
 <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
     <div>
@@ -7,7 +20,7 @@
             <div class="alert-danger">
                 @if(playerForm.get('name')?.errors?.['required']){
                     <div class="container-error-message">
-                        El nombre es requerido
+                        El nombre es obligatorio
                     </div>
                 } @else if (playerForm.get('name')?.errors?.['noNumbers']){
                     <div class="container-error-message">
@@ -33,7 +46,7 @@
             <div class="alert-danger">
                 @if(playerForm.get('position')?.errors?.['required']){
                     <div class="container-error-message">
-                        La posición es requerida
+                        La posición es obligatoria
                     </div>
                 }
             </div>
@@ -46,11 +59,11 @@
             <div class="alert-danger">
                 @if(playerForm.get('club')?.errors?.['required']){
                     <div class="container-error-message">
-                        El club es requerido
+                        El club es obligatorio
                     </div>
                 }@else if(playerForm.get('club')?.errors?.['minlength']){
                     <div class="container-error-message">
-                        El club debe tener al menos 4 caracteres
+                        El club debe tener al menos 3 caracteres
                     </div>
                 }
             </div>
@@ -63,7 +76,7 @@
             <div class="alert-danger">
                 @if(playerForm.get('rating')?.errors?.['required']){
                     <div class="container-error-message">
-                        La calificación es requerida
+                        La calificación es obligatoria
                     </div>
                 }@else if(playerForm.get('rating')?.errors?.['min']){
                     <div class="container-error-message">
@@ -71,7 +84,7 @@
                     </div>
                 }@else if(playerForm.get('rating')?.errors?.['max']){
                     <div class="container-error-message">
-                        La calificación debe ser menor a cien (100)
+                        La calificación debe ser menor a 100
                     </div>
                 }
             </div>
@@ -84,7 +97,7 @@
             <div class="alert-danger">
                 @if(playerForm.get('nationality')?.errors?.['required']){
                     <div class="container-error-message">
-                        La nacionalidad es requerida
+                        La nacionalidad es obligatoria
                     </div>
                 }@else if(playerForm.get('nationality')?.errors?.['minlength']){
                     <div class="container-error-message">
@@ -99,24 +112,73 @@
     <div>
         <label for="speed">Velocidad: </label>
         <input id="speed" type="number" formControlName="speed" placeholder="90">
+        @if(playerForm.get('speed')?.invalid){
+            <div class="alert-danger">
+                @if(playerForm.get('speed')?.errors?.['min']){
+                    <div class="container-error-message">
+                        La velocidad debe ser mayor o igual a 0
+                    </div>
+                }@else if(playerForm.get('speed')?.errors?.['max']){
+                    <div class="container-error-message">
+                        La velocidad debe ser menor o igual a 100 
+                    </div>
+                }
+            </div>
+        }
     </div>
     <div>
         <label for="dribbling">Regate: </label>
         <input id="dribbling" type="number" formControlName="dribbling" placeholder="90">
+        @if(playerForm.get('dribbling')?.invalid){
+            <div class="alert-danger">
+                @if(playerForm.get('dribbling')?.errors?.['min']){
+                    <div class="container-error-message">
+                        El regate debe ser mayor o igual a 0
+                    </div>
+                }@else if(playerForm.get('dribbling')?.errors?.['max']){
+                    <div class="container-error-message">
+                        El regate debe ser menor o igual a 100 
+                    </div>
+                }
+            </div>
+        }
     </div>
     <div>
         <label for="shooting">Tiro: </label>
         <input id="shooting" type="number" formControlName="shooting" placeholder="90">
+        @if(playerForm.get('shooting')?.invalid){
+            <div class="alert-danger">
+                @if(playerForm.get('shooting')?.errors?.['min']){
+                    <div class="container-error-message">
+                        El tiro debe ser mayor o igual a 0
+                    </div>
+                }@else if(playerForm.get('shooting')?.errors?.['max']){
+                    <div class="container-error-message">
+                        El tiro debe ser menor o igual a 100 
+                    </div>
+                }
+            </div>
+        }
     </div>
     <div>
         <label for="passing">Pase: </label>
         <input id="passing" type="number" formControlName="passing" placeholder="90">
+        @if(playerForm.get('passing')?.invalid){
+            <div class="alert-danger">
+                @if(playerForm.get('passing')?.errors?.['min']){
+                    <div class="container-error-message">
+                        El pase debe ser mayor o igual a 0
+                    </div>
+                }@else if(playerForm.get('passing')?.errors?.['max']){
+                    <div class="container-error-message">
+                        El pase debe ser menor o igual a 100 
+                    </div>
+                }
+            </div>
+        }
     </div>
-    <button type="submit" [disabled]="playerForm.invalid">Enviar</button>
+    <button type="submit" [disabled]="loading || playerForm.invalid">
+        {{ loading ? 'Guardando...' : (isEditMode ? 'Actualizar Jugador' : 'Crear Jugador') }}
+    </button>
 </form>
-
-<h2>Valores</h2>
-<pre>{{playerForm.value | json}} </pre>
-<h3>Es valido?</h3>
-<pre>{{playerForm.valid | json}}</pre>
 

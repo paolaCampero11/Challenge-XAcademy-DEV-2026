@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { PlayerResponse, PlayerService } from '../../services/player/player';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-players-list',
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    RouterModule
+  ],
   providers: [PlayerService],
   templateUrl: './players-list.html',
   styleUrl: './players-list.css',

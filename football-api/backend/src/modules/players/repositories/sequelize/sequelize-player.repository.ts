@@ -54,6 +54,72 @@ export class SequelizePlayerRepository implements IPlayerRepository {
     return this.mapToEntity(model);
   }
 
+  async create(data: Partial<Player>): Promise<Player> {
+    const model = await this.playerModel.create({
+      longName: data.name || 'Sin nombre',
+      clubName: data.club || '',
+      playerPositions: data.position || '',
+      nationalityName: data.nationality || '',
+      overall: data.rating  ?? 0,
+      
+      pace: data.speed ?? 0,
+      shooting: data.shooting ?? 0,
+      passing: data.passing ?? 0,
+      dribbling: data.dribbling ?? 0,
+
+      fifaVersion: '23',
+      fifaUpdate: '1',
+      
+      playerFaceUrl: '', 
+      potential:(data.rating ? data.rating + 2 : 90),
+      age: 25,
+        
+    } as any); 
+    
+    return this.mapToEntity(model);
+  }
+
+  async update(id: number, data: Partial<Player>): Promise<Player> {
+    const player = await this.playerModel.findByPk(id);
+    
+    if (!player) {
+      throw new Error('Jugador no encontrado');
+    }
+
+    const updateData: any ={}
+    if(data.name !== undefined) {
+      updateData.longName = data.name; 
+    }
+    if(data.club !== undefined) {
+      updateData.clubName = data.club; 
+    }
+    if(data.position !== undefined) {
+      updateData.playerPositions = data.position 
+    }
+    if(data.nationality !== undefined) {
+      updateData.nationalityName = data.nationality; 
+    }
+    if(data.rating !== undefined) {
+      updateData.overall = data.rating; 
+    }
+    if(data.speed !== undefined) {
+      updateData.pace = data.speed; 
+    }
+    if(data.shooting !== undefined) {
+      updateData.shooting = data.shooting; 
+    }
+    if(data.passing !== undefined) {
+      updateData.passing = data.passing; 
+    }
+    if(data.dribbling !== undefined) {
+      updateData.dribbling = data.dribbling; 
+    }
+
+    await player.update(updateData);
+  
+    return this.mapToEntity(player);
+  }
+
   private mapToEntity(model: PlayerModel): Player {
     console.log('Mapping PlayerModel to Player entity:', model);
     

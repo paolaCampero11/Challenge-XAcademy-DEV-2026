@@ -47,4 +47,12 @@ export class PlayerService {
   getPlayer(id: number): Observable<Player> {
     return this.http.get<Player>(`${this.baseUrl}/${id}`);
   }
+
+  createPlayer(data: any): Observable<any> {
+    return this.http.post('http://localhost:3000/api/players', data);
+  }
+
+  updatePlayer(id: number, data: any): Observable<any> {
+    return this.http.put(`http://localhost:3000/api/players/${id}`, data);
+  }
 }

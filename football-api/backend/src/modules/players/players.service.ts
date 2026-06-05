@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { FindAllOptions, IPlayerRepository, PaginatedResult } from './interfaces/player-repository.interface';
 import { Player } from './entities/player.entity';
+import { CreatePlayerDto } from './dto/create-player.dto';
+import { UpdatePlayerDto } from './dto/update-player.dto';
 
 @Injectable()
 export class PlayersService {
@@ -17,4 +19,11 @@ export class PlayersService {
     return this.playerRepository.findOneById(id);
   }
   
+  async createPlayer(createPlayerDto: CreatePlayerDto): Promise<Player> {
+    return this.playerRepository.create(createPlayerDto);
+  }
+
+  async updatePlayer(id: number, updatePlayerDto: UpdatePlayerDto): Promise<Player> {
+    return this.playerRepository.update(id, updatePlayerDto);
+  }
 }

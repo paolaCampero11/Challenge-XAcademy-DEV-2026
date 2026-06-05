@@ -1,6 +1,8 @@
-import { JsonPipe } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { PlayerService } from '../../services/player/player';
 
 interface Position {
   value: string;
@@ -10,12 +12,27 @@ interface Position {
   selector: 'app-player-form',
   imports: [
     ReactiveFormsModule,
-    JsonPipe
+    JsonPipe,
+    CommonModule,
+    RouterModule
   ],
   templateUrl: './player-form.html',
   styleUrl: './player-form.css',
 })
 export class PlayerForm {
+  
+  isEditMode = false;
+  playerId  : number =0 ;
+  loading = false;
+  successMessage = '';
+  errorMessage = '';
+  
+  constructor(private route: ActivatedRoute,
+  private router: Router,
+  private playerService: PlayerService){
+
+  }
+
   positions : Position[] = [
     {value: 'GK' },
     {value: 'RB' },
@@ -38,26 +55,82 @@ export class PlayerForm {
   playerForm = new FormGroup({
     name: new FormControl('', [Validators.required, this.noNumbersValidator, Validators.minLength(2)]),
     position: new FormControl('', [Validators.required]),
-    club: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    rating: new FormControl('', [Validators.required, Validators.min(1), Validators.max(100)]),
+    club: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    rating: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(99)]),
     nationality: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    speed: new FormControl('', [Validators.max(100)]),
-    dribbling: new FormControl('', [Validators.max(100)]),
-    shooting: new FormControl('', [Validators.max(100)]),
-    passing: new FormControl('', [Validators.max(100)]),
+    speed: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    dribbling: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    shooting: new FormControl(0, [Validators.min(0), Validators.max(100)]),
+    passing: new FormControl(0, [Validators.min(0), Validators.max(100)]),
 
   });
 
-  onSubmit() {
-    console.warn(this.playerForm.value);
+  ngOnInit(){
+    const id = this.route.snapshot.paramMap.get('id');
+  
+    if (id) {
+      this.isEditMode = true;
+      this.playerId = +id;
+      this.loadPlayer(this.playerId);
+    } else {
+      this.isEditMode = false;
+    }
   }
 
+  onSubmit() {
+    if (this.playerForm.invalid) return;
+  
+    if (this.isEditMode) {
+      this.playerService.updatePlayer(this.playerId, this.playerForm.value).subscribe({
+        next: () => {
+          this.successMessage = '¡Jugador actualizado exitosamente!';
+          setTimeout(() => {
+            this.router.navigate(['/players', this.playerId]);
+          }, 2000);        
+        }, 
+        error: (err) => {
+          console.error(err);
+          alert('Error al actualizar. Revisa los datos.');
+          this.loading = false;
+        }
+      })
+    } else {
+      this.playerService.createPlayer(this.playerForm.value).subscribe({
+        next: () => {
+          this.successMessage = '¡Jugador registrado exitosamente!';
+          setTimeout(() => {
+            this.router.navigate(['/players', this.playerId]);
+          }, 2000); 
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Error al actualizar. Revisa los datos.');
+          this.loading = false;
+        }
+      });
+    }
+  }
   onResetForm(){
     this.playerForm.reset();
   }
-/* 
-  get name(){ return this.playerForm.get('name'); } */
 
+  private loadPlayer(id: number) {
+    this.playerService.getPlayer(id).subscribe({
+      next: (data) => {
+        this.playerForm.patchValue({
+          name: data.name,
+          club: data.club,
+          position: data.position,
+          nationality: data.nationality,
+          rating: data.rating,
+          speed: data.speed,
+          shooting: data.shooting,
+          passing: data.passing,
+          dribbling: data.dribbling
+        });
+      }
+    });
+  }
   noNumbersValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (value && /\d/.test(value)) { 

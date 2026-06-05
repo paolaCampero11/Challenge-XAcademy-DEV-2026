@@ -24,7 +24,7 @@ export const routes: Routes = [
     },
     
     {
-        path: 'jugadores/:id/editar',
+        path: 'jugadores/editar/:id',
         component: PlayerForm
     },
     {

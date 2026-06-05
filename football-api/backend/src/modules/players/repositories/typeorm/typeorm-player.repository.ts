@@ -44,6 +44,50 @@ export class TypeOrmPlayerRepository implements IPlayerRepository {
     return entity;
   }
 
+  async create(data: Partial<Player>): Promise<Player> {
+    const newPlayer = this.playerRepository.create({
+      longName: data.name,
+      clubName: data.club,
+      playerPositions: data.position,
+      nationalityName: data.nationality,
+      overall: data.rating,
+      pace: data.speed,
+      shooting: data.shooting,
+      passing: data.passing,
+      dribbling: data.dribbling,
+      fifaVersion: '23',
+      fifaUpdate: '1',
+    });
+    
+    const saved = await this.playerRepository.save(newPlayer);
+    return this.mapToEntity(saved);
+  }
+
+  async update(id: number, data: Partial<Player>): Promise<Player> {
+    const existingPlayer = await this.playerRepository.findOne({ where: { id } });
+    if (existingPlayer === null) {
+      throw new Error('Jugador no encontrado');
+    }
+    
+    const updateData: any = {};
+    if (data.name !== undefined) updateData.longName = data.name;
+    if (data.club !== undefined) updateData.clubName = data.club;
+    if (data.position !== undefined) updateData.playerPositions = data.position;
+    if (data.nationality !== undefined) updateData.nationalityName = data.nationality;
+    if (data.rating !== undefined) updateData.overall = data.rating;
+    if (data.speed !== undefined) updateData.pace = data.speed;
+    if (data.shooting !== undefined) updateData.shooting = data.shooting;
+    if (data.passing !== undefined) updateData.passing = data.passing;
+    if (data.dribbling !== undefined) updateData.dribbling = data.dribbling;
+
+    const mergedData = { ...existingPlayer, ...updateData };
+
+    const updatedModel = await this.playerRepository.save(mergedData);
+
+    return this.mapToEntity(updatedModel);
+
+  }
+
   private mapToEntity(playerDto: PlayerDto): Player {
     const player = new Player();
     player.id = playerDto.id;

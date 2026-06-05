@@ -65,6 +65,11 @@
               <td>
                 <button (click)="verDetalle(player.id)">Ver más</button>
               </td>
+              <td>
+                <button [routerLink]="['/jugadores/editar', player.id]">
+                  Editar                
+                </button>
+              </td>
             </tr>
           }
           
