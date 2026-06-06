@@ -1,1 +1,52 @@
-<p>login works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="email">Email: </label>
+        <input type="email" formControlName="email" placeholder="ejemplo@gmail.com">
+        @if(loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)){
+            <div class="alert-danger">
+                @if(loginForm.get('email')?.errors?.['required']){
+                    <div class="container-error-message">
+                        El email es obligatorio
+                    </div>
+                }
+                @else if(loginForm.get('email')?.errors?.['email']){
+                    <div class="container-error-message">
+                        El email es inválido
+                    </div>
+                }
+            </div>
+        }
+        
+    </div>
+    <div>
+        <label for="email">Contraseña: </label>
+        <input type="password" formControlName="password">
+        @if(loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)){
+            <div class="alert-danger">
+                @if(loginForm.get('password')?.errors?.['required']){
+                    <div class="container-error-message">
+                        La contraseña es obligatoria
+                    </div>
+                }
+                @if(loginForm.get('password')?.errors?.['minlength']){
+                    <div class="container-error-message">
+                        La contraseña debe tener al menos 6 caracteres
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    @if(errorMessage){
+        <div style="background-color: #ffe6e6; color: #c0392b;">
+            {{errorMessage}}
+        </div>
+    }
+
+    <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+</form>
+
+<h2>Valores</h2>
+<pre>{{loginForm.value | json}} </pre>
+<h3>Es valido?</h3>
+<pre>{{loginForm.valid | json}}</pre>
