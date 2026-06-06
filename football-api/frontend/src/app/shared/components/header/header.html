@@ -1,17 +1,33 @@
-<header>
-    <div class="container">
-        <a href="#" class="logo">Logo</a>
 
-        <nav>
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">ELITE FIFA</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-flex align-items-center" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                
+                @if(authService.isAuthenticated()){
+                    <li class="nav-item">
+                        <a routerLink="/jugadores" routerLinkActive="active" class="nav-link active">Jugadores</a>
+                    </li>
+                        <li class="nav-item">
+                        <a routerLink="/jugadores/nuevo" routerLinkActive="active" class="nav-link">Registrar jugador</a>
+                        </li>
+                }
+                @else{
+                    <li class="nav-item">
+                        <a routerLink="/login" routerLinkActive="active" class="nav-link">Inicio de sesión</a>
+                    </li>
+                }
+            </ul>
+
             @if(authService.isAuthenticated()){
-                <a routerLink="/jugadores" routerLinkActive="active">Jugadores</a>
-                <a routerLink="/jugadores/nuevo" routerLinkActive="active">Registrar jugador</a>
-                <button (click)="logout()" >Cerrar Sesión</button>
+                <a (click)="logout()" class="nav-link" style="cursor: pointer;" >Cerrar Sesión</a>
             }
-            @else if(!authService.isAuthenticated()){
-                <a routerLink="/login" routerLinkActive="active">Inicio de sesión</a>
-            }
-        </nav>
+        </div>
     </div>
-    
-</header>
+</nav>
+
+

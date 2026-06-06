@@ -7,8 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   imports: [
-    ReactiveFormsModule,
-    JsonPipe
+    ReactiveFormsModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',

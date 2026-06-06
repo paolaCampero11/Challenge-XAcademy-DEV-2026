@@ -12,7 +12,6 @@ interface Position {
   selector: 'app-player-form',
   imports: [
     ReactiveFormsModule,
-    JsonPipe,
     CommonModule,
     RouterModule
   ],
