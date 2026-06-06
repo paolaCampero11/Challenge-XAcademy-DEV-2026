@@ -86,4 +86,15 @@ export class PlayersList implements OnInit {
   verDetalle(id: number) {
     this.router.navigate(['/jugadores', id]);    
   }
+
+  exportToCsv() {
+    console.log('🔥 BOTÓN PRESIONADO');
+  console.log('📦 Jugadores que se van a exportar:', this.players);
+
+  if (!this.players || this.players.length === 0) {
+    alert('⚠️ No hay jugadores en la lista para exportar.');
+    return; // Detenemos la ejecución si no hay datos
+  }
+    this.playerService.exportToCsv(this.players);
+  }
 }
