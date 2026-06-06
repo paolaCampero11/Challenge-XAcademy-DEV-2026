@@ -22,7 +22,7 @@ Aplicación web Full-Stack desarrollada para la gestión, búsqueda y administra
 ### Backend
 - **Framework:** NestJS (TypeScript)
 - **Base de Datos:** MySQL
-- **ORM:** Sequelize / TypeORM *(Elige el que hayas usado finalmente)*
+- **ORM:** Sequelize
 - **Seguridad:** Passport, JWT, `bcrypt`
 - **Validación:** `class-validator`, `class-transformer`
 
