@@ -10,6 +10,7 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  UseGuards,
   
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
@@ -18,8 +19,10 @@ import { FindAllOptions } from './interfaces/player-repository.interface';
 import { Player } from './entities/player.entity';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('api/players')
+@UseGuards(JwtAuthGuard)
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
